@@ -5,8 +5,6 @@ foreach ($env as $key => $value) {
 }
 
 require_once 'db.php';
-require_once 'controllers/mainController.php';
-
-$conexion = db::connect();
-
+$db = db::connect();
+require_once 'controllers/mainControllers.php';
 ?>
