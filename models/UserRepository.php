@@ -1,6 +1,6 @@
 <?php
 class UserRepository {
-    public static function getUserById($id) { //esto lo ha hecho la IA, hay q revisarlo
+    public static function getUserById($id) {
         $db = DB::connect();
         $query = "SELECT * FROM user WHERE id = $id";
         $result = $db->query($query);
