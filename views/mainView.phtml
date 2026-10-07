@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    BIENVENIDOS A ESTA TIENDA
+
+    <br><br>
+    <?php
+
+    if(isset($_SESSION['user'])){
+        echo "hola ".$_SESSION['user']->getName(). "<a href='index.php?c=product&new'>Subir producto</a> <a href='index.php?c=user&logout'>salir</a>";
+    }
+    else {
+        ?>
+    <a href="index.php?login">Entrar</a> <a href="index.php?register">Registrate</a>
+
+    <?php
+    }
+
+    if (!empty($products)) {
+        foreach ($products as $product) {
+            echo $product->getName() . "<br>";
+        }
+    } else {
+        echo "No hay productos disponibles.<br>";
+    }
+    ?>
+</body>
+</html>

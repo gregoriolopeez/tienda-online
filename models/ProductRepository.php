@@ -2,7 +2,7 @@
 class ProductRepository{
     public static function getProducts(){
     $db = DB::connect();
-    $query = "SELECT * FROM products";
+    $query = "SELECT * FROM product";
         $result = $db->query($query);
         $products = [];
         while($product = $result->fetch_assoc()){
