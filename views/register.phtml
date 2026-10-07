@@ -1,21 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=
-    , initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta - Tienda Online</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<a href="index.php">volver</a><br>
-    haz register:
-    <form action="index.php?c=user" method="POST">
-        <input type="text" name="name" placeholder="nombre" required>
-        <input type="email" name="email" placeholder="email" required>
-        <input type="password" name="password" placeholder="contraseña" required>
-        <input type="password" name="password2" placeholder="confirmar contraseña" required>
-        <input type="submit" name="register" value="registrarse">
-</form>
+    <main class="auth-page">
+        <div class="auth-card">
+            <a href="index.php" class="back-link" id="link-back">
+                <span>←</span> Volver a la tienda
+            </a>
+
+            <div class="form-header">
+                <div class="form-header-icon">✨</div>
+                <h1 class="form-title">Crear Cuenta</h1>
+                <p class="form-subtitle">Únete a la tienda para empezar a comprar y vender</p>
+            </div>
+
+            <form action="index.php?c=user" method="POST" id="form-register">
+                <div class="form-group">
+                    <label for="name" class="form-label">Nombre completo</label>
+                    <input 
+                        type="text" 
+                        name="name" 
+                        id="name" 
+                        class="form-control" 
+                        placeholder="Ej. Juan Gómez" 
+                        required
+                        autocomplete="name"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Correo electrónico</label>
+                    <input 
+                        type="email" 
+                        name="email" 
+                        id="email" 
+                        class="form-control" 
+                        placeholder="tu@email.com" 
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="password" 
+                        class="form-control" 
+                        placeholder="••••••••" 
+                        required
+                        autocomplete="new-password"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password2" class="form-label">Confirmar Contraseña</label>
+                    <input 
+                        type="password" 
+                        name="password2" 
+                        id="password2" 
+                        class="form-control" 
+                        placeholder="••••••••" 
+                        required
+                        autocomplete="new-password"
+                    >
+                </div>
+
+                <button type="submit" name="register" value="registrarse" class="btn btn-gradient btn-block" id="btn-submit-register">
+                    Registrarse
+                </button>
+            </form>
+
+            <div class="form-footer">
+                ¿Ya tienes una cuenta? 
+                <a href="index.php?login" id="link-login">Inicia sesión</a>
+            </div>
+        </div>
+    </main>
+
 </body>
 </html>
