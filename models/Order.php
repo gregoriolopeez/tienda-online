@@ -1,18 +1,19 @@
 <?php
 class Order{
     private $id;
-    private $user_id; //buyer
-    private $product_id; //products
-    private $total; //total price
+    private $buyer;
+    private $total_price;
     private $date;
-    //añadir status
+    private $status;
+    private $orderLines=[];
 
-    public function __construct($id, $user_id, $product_id, $total, $date){ //quitar products
-        $this->id=$id;
-        $this->user_id=$user_id; //UserRepositoy::getUserById($buyer_id)
-        $this->product_id=$product_id; //ProductRepositoy::getProductByOrderId($id)
-        $this->total=$total;
-        $this->date=$date;
+    public function __construct($id, $buyer_id, $total_price, $date, $status) {
+        $this->id = $id;
+        $this->buyer = UserRepository::getUserById($buyer_id);
+        $this->total_price = $total_price;
+        $this->date = $date;
+        $this->status = $status;  
+        $this->orderLines = OrderLineRepository::getOrderLinesByOrderId($id);
     }
 
     public function getId(){
@@ -23,16 +24,20 @@ class Order{
         return $this->user_id; 
     }
 
-    public function getProductId(){ //quitar
-        return $this->product_id;
-    }
-
     public function getTotal(){
         return $this->total;
     }
 
-    public function getDate(){
+    public function getStatus() {
+        return $this->status;
+    }
+
+    public function getDate() {
         return $this->date;
+    }
+
+    public function getProducts() {
+        return $this->products;
     }
 }
 ?>
