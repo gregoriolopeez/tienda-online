@@ -27,25 +27,6 @@ CREATE TABLE IF NOT EXISTS product (
   CONSTRAINT chk_product_stock CHECK (stock >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Carts table (one cart per user)
-CREATE TABLE IF NOT EXISTS cart (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL UNIQUE,
-  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  CONSTRAINT fk_cart_user FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Cart items (cart N:M product)
-CREATE TABLE IF NOT EXISTS cart_item (
-  cart_id INT NOT NULL,
-  product_id INT NOT NULL,
-  quantity INT NOT NULL,
-  PRIMARY KEY (cart_id, product_id),
-  CONSTRAINT chk_cart_item_quantity CHECK (quantity > 0),
-  CONSTRAINT fk_cart_item_cart FOREIGN KEY (cart_id) REFERENCES cart(id) ON DELETE CASCADE,
-  CONSTRAINT fk_cart_item_product FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 -- Orders table ("order" is a reserved word in SQL, so the table is named "orders")
 CREATE TABLE IF NOT EXISTS orders (
   id INT AUTO_INCREMENT PRIMARY KEY,
