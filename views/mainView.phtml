@@ -12,26 +12,38 @@
     <?php
 
     if(isset($_SESSION['user'])){
-        echo "hola ".$_SESSION['user']->getUsername(). "<a href='index.php?c=product&new'>Subir producto</a> <a href='index.php?c=user&logout'>salir</a>";
+        echo "hola <strong>".$_SESSION['user']->getUsername()."</strong> | <a href='index.php?c=order&show'>🛒 Ver carrito</a> | <a href='index.php?c=user&logout'>Salir</a>";
     }
     else {
         ?>
-    <a href="index.php?login">Entrar</a> <a href="index.php?register">Registrate</a>
-
+    <a href="index.php?login">Entrar</a> | <a href="index.php?register">Regístrate</a>
     <?php
     }
-echo "<br><br>";
+    echo "<br><br>";
+    ?>
 
+    <h2>Catálogo de Productos</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px;">
+    <?php
     foreach($products as $product){
-        echo $product->getName();
     ?>
-        <form action="index.php?c=order&add" method="POST">
-            <input type="hidden" name="id" <?php echo 'value="'.$product->getId().'"'; ?>>
-            <input type="number" name="quantity" value="1">
-            <input type="submit" value="Añadir al carrito">
-        </form>
+        <div style="border: 1px solid #ddd; border-radius: 8px; padding: 14px; background: #fafafa;">
+            <h3 style="margin: 0 0 8px 0;"><?= htmlspecialchars($product->getName()) ?></h3>
+            <p style="color: #555; font-size: 0.9em; margin-bottom: 8px;"><?= htmlspecialchars($product->getDescription() ?: 'Sin descripción') ?></p>
+            <p style="margin-bottom: 10px;">
+                <strong>Precio:</strong> <?= number_format($product->getPrice(), 2) ?> €<br>
+                <strong>Stock:</strong> <?= $product->getStock() ?> unidades
+            </p>
+            <form action="index.php?c=order&add" method="POST">
+                <input type="hidden" name="id" value="<?= $product->getId() ?>">
+                <label>Cantidad: </label>
+                <input type="number" name="quantity" value="1" min="1" max="<?= max(1, $product->getStock()) ?>" style="width: 55px;">
+                <input type="submit" value="🛒 Añadir al carrito">
+            </form>
+        </div>
     <?php
     }
     ?>
+    </div>
 </body>
 </html>

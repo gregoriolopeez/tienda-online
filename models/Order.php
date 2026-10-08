@@ -23,7 +23,7 @@ class Order{
     }
 
     public function getBuyer() {
-        return $this->user_id;
+        return $this->buyer;
     }
 
 

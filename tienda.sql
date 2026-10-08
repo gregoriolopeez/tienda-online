@@ -7,47 +7,55 @@ CREATE DATABASE IF NOT EXISTS shop
 
 USE shop;
 
--- Users table (password = hash, never the plain-text password)
-CREATE TABLE IF NOT EXISTS user (
+-- Tabla users
+CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  email VARCHAR(150) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL,
-  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+  username VARCHAR(100) NOT NULL,
+  password VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Products table
-CREATE TABLE IF NOT EXISTS product (
+-- Tabla products
+CREATE TABLE IF NOT EXISTS products (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(150) NOT NULL,
   description TEXT,
   price DECIMAL(10,2) NOT NULL,
-  stock INT NOT NULL DEFAULT 0,
-  CONSTRAINT chk_product_price CHECK (price >= 0),
-  CONSTRAINT chk_product_stock CHECK (stock >= 0)
+  stock INT NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Orders table ("order" is a reserved word in SQL, so the table is named "orders")
+-- Tabla orders
 CREATE TABLE IF NOT EXISTS orders (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  ordered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  status ENUM('pending','paid','shipped','delivered','cancelled') NOT NULL DEFAULT 'pending',
-  total DECIMAL(10,2) NOT NULL,
-  CONSTRAINT chk_orders_total CHECK (total >= 0),
-  CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE RESTRICT,
-  INDEX idx_orders_ordered_at (ordered_at)
+  buyer_id INT NOT NULL,
+  total_price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  status INT NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Order items (orders N:M product). unit_price = product price at purchase time
-CREATE TABLE IF NOT EXISTS order_item (
+-- Tabla order_lines
+CREATE TABLE IF NOT EXISTS order_lines (
+  id INT AUTO_INCREMENT PRIMARY KEY,
   order_id INT NOT NULL,
   product_id INT NOT NULL,
   quantity INT NOT NULL,
-  unit_price DECIMAL(10,2) NOT NULL,
-  PRIMARY KEY (order_id, product_id),
-  CONSTRAINT chk_order_item_quantity CHECK (quantity > 0),
-  CONSTRAINT chk_order_item_unit_price CHECK (unit_price >= 0),
-  CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
-  CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE RESTRICT
+  price DECIMAL(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Compatibilidad: vistas / tablas en singular si aún se usan
+CREATE TABLE IF NOT EXISTS user LIKE users;
+CREATE TABLE IF NOT EXISTS product LIKE products;
+
+-- Productos de muestra iniciales
+INSERT INTO products (name, description, price, stock) VALUES
+('Auriculares Inalámbricos Pro', 'Auriculares de diadema con cancelación activa de ruido (ANC), Bluetooth 5.3 y batería de hasta 40 horas.', 149.99, 15),
+('Teclado Mecánico RGB Switch Brown', 'Teclado mecánico compacto con chasis de aluminio e interruptores táctiles silenciosos.', 79.90, 20),
+('Ratón Gaming Ergonómico 16000 DPI', 'Sensor óptico de alta resolución, peso ultraligero de 68g y 6 botones programables.', 45.50, 30),
+('Monitor Curvo Gaming 27" 165Hz QHD', 'Panel VA 2560x1440, curvatura 1500R y 1ms de tiempo de respuesta.', 229.00, 8),
+('Mochila Impermeable para Portátil 15.6"', 'Diseño antirrobo con compartimento acolchado para portátil y puerto USB exterior.', 39.95, 25),
+('Soporte Ergonómico de Aluminio', 'Base plegable multialtura para portátiles de hasta 17 pulgadas.', 24.99, 18),
+('Alfombrilla Gaming XXL (900x400 mm)', 'Superficie de microfibra de baja fricción y base de goma antideslizante.', 19.90, 40),
+('Altavoz Inteligente con Asistente', 'Altavoz estéreo 360 grados, conectividad Wi-Fi dual band y Bluetooth.', 49.99, 12),
+('Memoria SSD NVMe M.2 1TB Gen4', 'Velocidades de lectura ultrarrápidas de hasta 5000 MB/s.', 89.00, 22),
+('Webcam Full HD 1080p con Micrófono', 'Cámara web con enfoque automático y tapa de privacidad.', 34.90, 16),
+('Lámpara LED de Escritorio con Carga Qi', 'Luz regulable con base de carga inalámbrica rápida para smartphones.', 32.50, 14),
+('Hub USB-C 7 en 1 Multifunción', 'Adaptador con HDMI 4K, 3 puertos USB 3.0, lector SD y PD 100W.', 27.99, 35);

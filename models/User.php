@@ -1,15 +1,20 @@
 <?php
 
+#[\AllowDynamicProperties]
 class User{
 
     private $id;
     private $username;
-//    private $rol;
+    public $name;
+    public $email;
+    public $password;
   
-    public function __construct($id, $username) {
+    public function __construct($id, $username = '', $email = '', $password = '') {
         $this->id = $id;
         $this->username = $username;
-        //$this->rol = $rol;
+        $this->name = $username;
+        $this->email = $email;
+        $this->password = $password;
     }
 
     public function getId() {
@@ -17,11 +22,15 @@ class User{
     }
 
     public function getUsername() {
-        return $this->username;
+        return $this->username ?? $this->name ?? '';
     }
 
-    /*public function getRol() {
-        return $this->rol;
-    }*/
+    public function getName() {
+        return $this->username ?? $this->name ?? '';
+    }
+
+    public function getEmail() {
+        return $this->email ?? '';
+    }
 
 }
