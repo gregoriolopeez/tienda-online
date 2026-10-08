@@ -17,7 +17,7 @@ class OrderLineRepository{
         $query="SELECT * FROM order_lines WHERE id=$id";
         $result=$db->query($query);
         $orderLine=$result->fetch_assoc();
-        return new OrderLine($orderLine['id'], $orderLine['product_id'], $orderLine['quantity'], $orderLine['price']);
+        return new OrderLine($orderLine['id'], $orderLine['product_id'], $orderLine['quantity'], $orderLine['price'], $orderLine['order_id']);
     }
 
     public static function addOrderLineToOrder($order, $product, $quantity){

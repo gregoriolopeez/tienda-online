@@ -25,7 +25,10 @@
     <h2>Catálogo de Productos</h2>
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px;">
     <?php
-    foreach($products as $product){
+    /** @var Product[] $products */
+    $products = $products ?? [];
+    if (!empty($products)) {
+        foreach($products as $product){
     ?>
         <div style="border: 1px solid #ddd; border-radius: 8px; padding: 14px; background: #fafafa;">
             <h3 style="margin: 0 0 8px 0;"><?= htmlspecialchars($product->getName()) ?></h3>
@@ -42,6 +45,9 @@
             </form>
         </div>
     <?php
+        }
+    } else {
+        echo "<p>No hay productos disponibles actualmente.</p>";
     }
     ?>
     </div>

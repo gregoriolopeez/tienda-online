@@ -9,7 +9,7 @@ class ProductRepository{
             $result = $db->query("SELECT * FROM products");
         } catch (\mysqli_sql_exception $e) {
             try {
-                $result = $db->query("SELECT * FROM product");
+                $result = $db->query("SELECT * FROM products");
             } catch (\mysqli_sql_exception $e2) {
                 return [];
             }

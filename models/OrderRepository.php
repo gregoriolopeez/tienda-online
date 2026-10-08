@@ -3,7 +3,7 @@
 class OrderRepository{
 
     public static function getOrderById($id){
-          $db=DB::connect();
+        $db=DB::connect();
         $query="SELECT * FROM orders WHERE id=".$id;
         $result=$db->query($query);
         $order=$result->fetch_assoc();
@@ -12,14 +12,12 @@ class OrderRepository{
     }
 
     public static function getCarritoByUserId($id){
-         $db=DB::connect();
-    $q='SELECT * from orders where status=0 and buyer_id='.$id;
-
-    $result=$db->query($q);
-    if($row=$result->fetch_assoc()){
-        return new Order($row['id'], $row['buyer_id'], $row['total_price'], $row['date'], $row['status']);
-        
-    }
-    return false;
+        $db=DB::connect();
+        $q='SELECT * from orders where status=0 and buyer_id='.$id;
+        $result=$db->query($q);
+        if($row=$result->fetch_assoc()){
+            return new Order($row['id'], $row['buyer_id'], $row['total_price'], $row['date'], $row['status']);
+        }
+        return false;
     }
 }
