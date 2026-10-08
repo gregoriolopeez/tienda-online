@@ -6,9 +6,16 @@ if(isset($_GET['new'])){
 }
 
 if(isset($_GET['add'])){
-$q="INSERT INTO product (nombre, description, price, stock) VALUES ('{$_POST['nombre']}', '{$_POST['descripcion']}', {$_POST['precio']}, {$_POST['stock']})";
-$db = DB::connect();
-$db->query($q);
-header("Location: index.php");
+    if(isset($_POST['name']) && isset($_POST['description']) && isset($_POST['price']) && isset($_POST['stock'])){
+        $q= "INSERT INTO products VALUES (NULL, '". $_POST['name'] ."', '". $_POST['description'] ."', ". $_POST['price'] .", ". $_POST['stock'] .")";
+        $db=DB::connect();
+        $db->query($q);
+        if($db->insert_id){
+            header("Location: index.php");
+            exit;
+        }
+    }
+
+header("Location: index.php?c=product&new");
 exit;
 }

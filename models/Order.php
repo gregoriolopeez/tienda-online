@@ -1,5 +1,7 @@
 <?php
+
 class Order{
+
     private $id;
     private $buyer;
     private $total_price;
@@ -16,16 +18,17 @@ class Order{
         $this->orderLines = OrderLineRepository::getOrderLinesByOrderId($id);
     }
 
-    public function getId(){
+    public function getId() {
         return $this->id;
     }
 
-    public function getUserId(){
-        return $this->user_id; 
+    public function getBuyer() {
+        return $this->user_id;
     }
 
-    public function getTotal(){
-        return $this->total;
+
+    public function getTotal() {
+        return $this->total_price;
     }
 
     public function getStatus() {
@@ -39,5 +42,8 @@ class Order{
     public function getProducts() {
         return $this->products;
     }
+
+    public function getOrderLines(){
+        return $this->orderLines;
+    }
 }
-?>

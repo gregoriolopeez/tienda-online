@@ -1,150 +1,37 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda Online - Catálogo</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
 </head>
 <body>
+    BIENVENIDOS A ESTA TIENDA
 
-    <!-- Navegación Superior -->
-    <header class="navbar">
-        <div class="container nav-container">
-            <a href="index.php" class="brand-logo" id="brand-logo">
-                <div class="brand-icon">✦</div>
-                <div class="brand-name">Tienda<span>Online</span></div>
-            </a>
+    <br><br>
+    <?php
 
-            <nav class="nav-actions">
-                <?php 
-                $cartCount = !empty($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
-                ?>
+    if(isset($_SESSION['user'])){
+        echo "hola ".$_SESSION['user']->getUsername(). "<a href='index.php?c=product&new'>Subir producto</a> <a href='index.php?c=user&logout'>salir</a>";
+    }
+    else {
+        ?>
+    <a href="index.php?login">Entrar</a> <a href="index.php?register">Registrate</a>
 
-                <!-- Botón de Carrito -->
-                <a href="#carrito" class="cart-badge-btn" id="cart-btn" title="Productos en el carrito">
-                    <span>🛒 Carrito</span>
-                    <span class="cart-count" id="cart-counter"><?= $cartCount ?></span>
-                </a>
+    <?php
+    }
+echo "<br><br>";
 
-                <?php if (isset($_SESSION['user'])): ?>
-                    <div class="user-badge" id="user-badge">
-                        <div class="user-avatar"><?= strtoupper(substr($_SESSION['user']->getName(), 0, 1)) ?></div>
-                        <span class="user-name">Hola, <?= htmlspecialchars($_SESSION['user']->getName()) ?></span>
-                    </div>
-
-                    <a href="index.php?c=product&new" class="btn btn-sm btn-primary" id="btn-new-product">
-                        <span>＋</span> Subir producto
-                    </a>
-
-                    <a href="index.php?c=user&logout" class="btn btn-sm btn-danger-outline" id="btn-logout">
-                        Salir
-                    </a>
-                <?php else: ?>
-                    <a href="index.php?login" class="btn btn-sm btn-outline" id="btn-login">
-                        Entrar
-                    </a>
-                    <a href="index.php?register" class="btn btn-sm btn-gradient" id="btn-register">
-                        Registrarse
-                    </a>
-                <?php endif; ?>
-            </nav>
-        </div>
-    </header>
-
-    <main class="container">
-        <!-- Hero Banner -->
-        <section class="hero">
-            <div class="hero-pill">
-                <span>✨</span> Calidad y confianza
-            </div>
-            <h1 class="hero-title">Descubre Nuestra <span>Colección</span></h1>
-            <p class="hero-subtitle">
-                Explora los mejores artículos con las mejores ofertas y disponibilidad inmediata.
-            </p>
-
-            <?php if (!empty($_SESSION['cart'])): ?>
-                <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: var(--radius-md); padding: 1rem 1.5rem; display: inline-flex; align-items: center; gap: 1.5rem; margin-top: 0.5rem;" id="cart-checkout-bar">
-                    <span>🛒 Tienes <strong><?= $cartCount ?></strong> artículo(s) en tu carrito</span>
-                    <a href="index.php?order" class="btn btn-sm btn-gradient" id="btn-checkout">
-                        Finalizar Pedido →
-                    </a>
-                </div>
-            <?php endif; ?>
-        </section>
-
-        <!-- Catálogo de Productos -->
-        <section id="productos">
-            <div class="section-header">
-                <div>
-                    <h2 class="section-title">Productos Disponibles</h2>
-                </div>
-                <span class="section-count">
-                    <?= !empty($products) ? count($products) . ' artículos' : '0 artículos' ?>
-                </span>
-            </div>
-
-            <?php
-            /** @var Product[] $products */
-            if (!empty($products)): ?>
-                <div class="product-grid" id="product-grid">
-                    <?php foreach ($products as $product): ?>
-                        <article class="product-card" id="product-<?= $product->getId() ?>">
-                            <div class="card-banner">
-                                <?php if ($product->getStock() > 0): ?>
-                                    <span class="card-badge-stock stock-in">Stock: <?= $product->getStock() ?></span>
-                                <?php else: ?>
-                                    <span class="card-badge-stock stock-out">Agotado</span>
-                                <?php endif; ?>
-                                <div class="card-product-icon">📦</div>
-                            </div>
-
-                            <div class="card-body">
-                                <h3 class="card-title"><?= htmlspecialchars($product->getName()) ?></h3>
-                                <p class="card-description">
-                                    <?= htmlspecialchars($product->getDescription() ?: 'Sin descripción disponible.') ?>
-                                </p>
-
-                                <div class="card-footer">
-                                    <div class="card-price-container">
-                                        <span class="price-label">Precio</span>
-                                        <span class="price-value"><?= number_format($product->getPrice(), 2) ?> €</span>
-                                    </div>
-
-                                    <?php if ($product->getStock() > 0): ?>
-                                        <a href="index.php?addCart=<?= $product->getId() ?>" class="btn btn-sm btn-primary" id="btn-add-<?= $product->getId() ?>">
-                                            <span>＋</span> Añadir
-                                        </a>
-                                    <?php else: ?>
-                                        <button class="btn btn-sm btn-outline" disabled style="opacity: 0.5; cursor: not-allowed;">
-                                            Agotado
-                                        </button>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        </article>
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <div class="empty-state" id="empty-state">
-                    <div class="empty-icon">🏷️</div>
-                    <h3 class="empty-title">No hay productos disponibles</h3>
-                    <p class="empty-desc">Actualmente no hay artículos a la venta. Si eres usuario registrado, puedes subir el primero.</p>
-                    <?php if (isset($_SESSION['user'])): ?>
-                        <a href="index.php?c=product&new" class="btn btn-primary">Subir primer producto</a>
-                    <?php else: ?>
-                        <a href="index.php?login" class="btn btn-outline">Inicia sesión para añadir</a>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; <?= date('Y') ?> Tienda Online. Proyecto DWES 2º DAW.</p>
-        </div>
-    </footer>
-
+    foreach($products as $product){
+        echo $product->getName();
+    ?>
+        <form action="index.php?c=order&add" method="POST">
+            <input type="hidden" name="id" <?php echo 'value="'.$product->getId().'"'; ?>>
+            <input type="number" name="quantity" value="1">
+            <input type="submit" value="Añadir al carrito">
+        </form>
+    <?php
+    }
+    ?>
 </body>
 </html>

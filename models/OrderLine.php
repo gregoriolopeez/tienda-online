@@ -1,6 +1,7 @@
 <?php
 
 class OrderLine{
+
     private $id;
     private $product;
     private $quantity;
@@ -11,15 +12,14 @@ class OrderLine{
         $this->product = ProductRepository::getProductById($product_id);
         $this->quantity = $quantity;
         $this->price = $price;
-        $this->order = OrderRepository::getOrderById($order_id);
     }
 
     public function getId() {
         return $this->order_id;
     }
 
-    public function getProductId() {
-        return $this->product_id;
+    public function getProduct() {
+        return $this->product;
     }
 
     public function getQuantity() {
