@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración - Usuarios</title>
+    <title>Panel de Administración - Tienda Online</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
         .admin-container {
-            max-width: 1100px;
+            max-width: 1180px;
             margin: 30px auto;
-            padding: 0 20px;
+            padding: 0 20px 60px;
         }
         .admin-header {
             display: flex;
@@ -93,16 +93,41 @@
             backdrop-filter: blur(10px);
         }
         .stat-label {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: #94a3b8;
             font-weight: 600;
         }
         .stat-value {
-            font-size: 2rem;
+            font-size: 1.9rem;
             font-weight: 800;
             color: #f8fafc;
+        }
+        .quick-nav {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .quick-nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #e2e8f0;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .quick-nav-btn:hover {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.15);
+            color: #fff;
         }
         .table-card {
             background: rgba(30, 41, 59, 0.7);
@@ -111,6 +136,7 @@
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             backdrop-filter: blur(10px);
+            margin-bottom: 36px;
         }
         .table-header {
             padding: 18px 24px;
@@ -118,14 +144,17 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 14px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
         .table-header h2 {
-            font-size: 1.15rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: #fff;
             margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .search-box {
             position: relative;
@@ -138,7 +167,7 @@
             border-radius: 8px;
             font-size: 0.9rem;
             outline: none;
-            width: 240px;
+            width: 250px;
             transition: all 0.2s ease;
         }
         .search-box input:focus {
@@ -155,14 +184,14 @@
             font-size: 0.8rem;
             opacity: 0.7;
         }
-        .users-table {
+        .admin-table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
         }
-        .users-table th {
+        .admin-table th {
             background: rgba(15, 23, 42, 0.4);
-            padding: 14px 20px;
+            padding: 14px 18px;
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -170,17 +199,17 @@
             font-weight: 600;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .users-table td {
-            padding: 16px 20px;
+        .admin-table td {
+            padding: 14px 18px;
             font-size: 0.95rem;
             color: #e2e8f0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             vertical-align: middle;
         }
-        .users-table tr:hover td {
+        .admin-table tr:hover td {
             background: rgba(255, 255, 255, 0.02);
         }
-        .role-badge {
+        .role-badge, .status-badge {
             display: inline-flex;
             align-items: center;
             gap: 5px;
@@ -189,7 +218,6 @@
             font-size: 0.8rem;
             font-weight: 700;
             letter-spacing: 0.03em;
-            text-transform: uppercase;
         }
         .role-admin {
             background: rgba(168, 85, 247, 0.18);
@@ -201,9 +229,29 @@
             color: #60a5fa;
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
+        .status-cart {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.35);
+        }
+        .status-completed {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.35);
+        }
+        .status-shipped {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.35);
+        }
+        .status-cancelled {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.35);
+        }
         .user-avatar {
-            width: 34px;
-            height: 34px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: linear-gradient(135deg, #6366f1, #a855f7);
             color: #fff;
@@ -211,8 +259,9 @@
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             margin-right: 10px;
+            flex-shrink: 0;
         }
         .user-identity {
             display: flex;
@@ -228,6 +277,75 @@
             margin-left: 8px;
             font-weight: 600;
         }
+        .btn-toggle-details {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #e2e8f0;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-toggle-details:hover {
+            background: #6366f1;
+            color: #fff;
+            border-color: #6366f1;
+        }
+        .details-wrapper {
+            background: rgba(15, 23, 42, 0.75);
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 6px 0;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+        .details-table th {
+            text-align: left;
+            padding: 8px 12px;
+            background: rgba(30, 41, 59, 0.6);
+            color: #94a3b8;
+            font-size: 0.78rem;
+            border-radius: 4px;
+        }
+        .details-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: #cbd5e1;
+        }
+        .status-select {
+            background: rgba(15, 23, 42, 0.8);
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .status-select:focus {
+            border-color: #6366f1;
+        }
+        .badge-count {
+            background: rgba(99, 102, 241, 0.3);
+            color: #c7d2fe;
+            padding: 2px 7px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 6px;
+        }
+        .order-price {
+            font-weight: 700;
+            color: #34d399;
+            font-size: 1.05rem;
+        }
     </style>
 </head>
 <body>
@@ -236,7 +354,7 @@
         <header class="admin-header">
             <div class="admin-title-group">
                 <h1>⚙️ Panel de Administración</h1>
-                <p>Gestión y supervisión de usuarios registrados en la tienda</p>
+                <p>Gestión centralizada de pedidos y usuarios de la tienda</p>
             </div>
             <nav class="admin-nav">
                 <a href="index.php" class="admin-btn btn-secondary">🏠 Tienda</a>
@@ -258,11 +376,34 @@
                 $totalStandard++;
             }
         }
+
+        /** @var Order[] $orders */
+        $orders = $orders ?? [];
+        $totalOrders = count($orders);
+        $totalRevenue = 0.0;
+        $completedOrdersCount = 0;
+        $cartOrdersCount = 0;
+        foreach ($orders as $o) {
+            $totalRevenue += floatval($o->getTotal());
+            if ($o->getStatus() == 1) {
+                $completedOrdersCount++;
+            } elseif ($o->getStatus() == 0) {
+                $cartOrdersCount++;
+            }
+        }
         $currentUserId = isset($_SESSION['user']) ? $_SESSION['user']->getId() : null;
         ?>
 
         <!-- Tarjetas de estadísticas -->
         <section class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-label">Total Pedidos</span>
+                <span class="stat-value" style="color: #38bdf8;"><?= $totalOrders ?></span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Importe Acumulado</span>
+                <span class="stat-value" style="color: #34d399;"><?= number_format($totalRevenue, 2) ?> €</span>
+            </div>
             <div class="stat-card">
                 <span class="stat-label">Total Usuarios</span>
                 <span class="stat-value"><?= $totalUsers ?></span>
@@ -271,26 +412,186 @@
                 <span class="stat-label">Administradores</span>
                 <span class="stat-value" style="color: #c084fc;"><?= $totalAdmins ?></span>
             </div>
-            <div class="stat-card">
-                <span class="stat-label">Clientes / Normales</span>
-                <span class="stat-value" style="color: #60a5fa;"><?= $totalStandard ?></span>
+        </section>
+
+        <!-- Accesos rápidos -->
+        <div class="quick-nav">
+            <a href="#ordersSection" class="quick-nav-btn">
+                <span>📦 Pedidos</span>
+                <span class="badge-count"><?= $totalOrders ?></span>
+            </a>
+            <a href="#usersSection" class="quick-nav-btn">
+                <span>👥 Usuarios</span>
+                <span class="badge-count"><?= $totalUsers ?></span>
+            </a>
+        </div>
+
+        <!-- ================= SECCIÓN DE PEDIDOS ================= -->
+        <section class="table-card" id="ordersSection">
+            <div class="table-header">
+                <h2>
+                    <span>📦 Listado de Pedidos</span>
+                    <span class="badge-count"><?= $totalOrders ?></span>
+                </h2>
+                <div class="search-box">
+                    <input type="text" id="orderSearch" placeholder="Buscar por ID, cliente, estado..." onkeyup="filterOrders()">
+                </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="admin-table" id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 75px;">ID</th>
+                            <th>Cliente</th>
+                            <th>Fecha</th>
+                            <th>Artículos</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th style="text-align: right; width: 140px;">Detalles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php if (!empty($orders)): ?>
+                        <?php foreach ($orders as $order): ?>
+                            <?php
+                                $buyer = $order->getBuyer();
+                                $buyerName = $buyer ? $buyer->getUsername() : ('Usuario #' . $order->getBuyerId());
+                                $initial = strtoupper(substr($buyerName, 0, 1));
+                                $lines = $order->getOrderLines();
+                                $totalUnits = 0;
+                                foreach ($lines as $line) {
+                                    $totalUnits += $line->getQuantity();
+                                }
+                                $status = intval($order->getStatus());
+
+                                // Configuración visual del estado
+                                $statusLabel = 'Carrito';
+                                $statusClass = 'status-cart';
+                                if ($status === 1) {
+                                    $statusLabel = 'Completado';
+                                    $statusClass = 'status-completed';
+                                } elseif ($status === 2) {
+                                    $statusLabel = 'Enviado';
+                                    $statusClass = 'status-shipped';
+                                } elseif ($status === 3) {
+                                    $statusLabel = 'Cancelado';
+                                    $statusClass = 'status-cancelled';
+                                }
+                            ?>
+                            <tr class="order-main-row" data-order-id="<?= $order->getId() ?>">
+                                <td style="color: #94a3b8; font-weight: 700;">#<?= $order->getId() ?></td>
+                                <td>
+                                    <div class="user-identity">
+                                        <div class="user-avatar"><?= htmlspecialchars($initial) ?></div>
+                                        <div>
+                                            <strong><?= htmlspecialchars($buyerName) ?></strong>
+                                            <?php if ($buyer && $buyer->getId() == $currentUserId): ?>
+                                                <span class="you-tag">Tú</span>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="color: #cbd5e1; font-size: 0.9rem;">
+                                    <?= htmlspecialchars(date('d/m/Y H:i', strtotime($order->getDate()))) ?>
+                                </td>
+                                <td>
+                                    <span style="font-weight: 600; color: #f8fafc;"><?= count($lines) ?> prod.</span>
+                                    <span style="color: #94a3b8; font-size: 0.85rem;">(<?= $totalUnits ?> un.)</span>
+                                </td>
+                                <td>
+                                    <span class="order-price"><?= number_format($order->getTotal(), 2) ?> €</span>
+                                </td>
+                                <td>
+                                    <form method="POST" action="index.php?c=admin" style="display: flex; align-items: center; gap: 8px; margin: 0;">
+                                        <input type="hidden" name="action" value="update_order_status">
+                                        <input type="hidden" name="order_id" value="<?= $order->getId() ?>">
+                                        <select name="status" class="status-select" onchange="this.form.submit()" title="Cambiar estado del pedido">
+                                            <option value="0" <?= $status === 0 ? 'selected' : '' ?>>🛒 Carrito</option>
+                                            <option value="1" <?= $status === 1 ? 'selected' : '' ?>>✅ Completado</option>
+                                            <option value="2" <?= $status === 2 ? 'selected' : '' ?>>🚚 Enviado</option>
+                                            <option value="3" <?= $status === 3 ? 'selected' : '' ?>>❌ Cancelado</option>
+                                        </select>
+                                    </form>
+                                </td>
+                                <td style="text-align: right;">
+                                    <button type="button" class="btn-toggle-details" id="btn-toggle-<?= $order->getId() ?>" onclick="toggleOrderDetails(<?= $order->getId() ?>)">
+                                        ▼ Ver artículos
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- Fila desplegable con detalle de productos -->
+                            <tr id="details-row-<?= $order->getId() ?>" style="display: none;" class="order-sub-row">
+                                <td colspan="7" style="padding: 0 18px 18px 18px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                                    <div class="details-wrapper">
+                                        <div style="font-weight: 700; margin-bottom: 10px; color: #f8fafc; font-size: 0.9rem;">
+                                            📋 Desglose de Productos del Pedido #<?= $order->getId() ?>
+                                        </div>
+                                        <?php if (!empty($lines)): ?>
+                                            <table class="details-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Producto</th>
+                                                        <th style="width: 120px;">Precio Unitario</th>
+                                                        <th style="width: 90px; text-align: center;">Cantidad</th>
+                                                        <th style="width: 120px; text-align: right;">Subtotal</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                <?php foreach ($lines as $line): ?>
+                                                    <?php 
+                                                        $prod = $line->getProduct();
+                                                        $prodName = $prod ? $prod->getName() : ('Producto #' . $line->getId());
+                                                        $subtotal = floatval($line->getPrice()) * intval($line->getQuantity());
+                                                    ?>
+                                                    <tr>
+                                                        <td><strong><?= htmlspecialchars($prodName) ?></strong></td>
+                                                        <td><?= number_format(floatval($line->getPrice()), 2) ?> €</td>
+                                                        <td style="text-align: center; font-weight: 600;"><?= $line->getQuantity() ?></td>
+                                                        <td style="text-align: right; font-weight: 700; color: #34d399;">
+                                                            <?= number_format($subtotal, 2) ?> €
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        <?php else: ?>
+                                            <p style="color: #94a3b8; margin: 0; font-size: 0.9rem;">Este pedido no tiene productos asociados en sus líneas.</p>
+                                        <?php endif; ?>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 40px; color: #94a3b8;">
+                                No hay pedidos registrados en la base de datos todavía.
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                    </tbody>
+                </table>
             </div>
         </section>
 
-        <!-- Tabla de usuarios -->
-        <div class="table-card">
+        <!-- ================= SECCIÓN DE USUARIOS ================= -->
+        <section class="table-card" id="usersSection">
             <div class="table-header">
-                <h2>Lista de Usuarios Creados</h2>
+                <h2>
+                    <span>👥 Listado de Usuarios</span>
+                    <span class="badge-count"><?= $totalUsers ?></span>
+                </h2>
                 <div class="search-box">
                     <input type="text" id="userSearch" placeholder="Buscar por usuario o rol..." onkeyup="filterUsers()">
                 </div>
             </div>
 
             <div style="overflow-x: auto;">
-                <table class="users-table" id="usersTable">
+                <table class="admin-table" id="usersTable">
                     <thead>
                         <tr>
-                            <th style="width: 70px;">ID</th>
+                            <th style="width: 75px;">ID</th>
                             <th>Usuario</th>
                             <th>Rol</th>
                         </tr>
@@ -324,7 +625,7 @@
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="3" style="text-align: center; padding: 30px; color: #94a3b8;">
+                            <td colspan="3" style="text-align: center; padding: 40px; color: #94a3b8;">
                                 No se encontraron usuarios en la base de datos.
                             </td>
                         </tr>
@@ -332,10 +633,45 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </section>
     </div>
 
     <script>
+        function toggleOrderDetails(orderId) {
+            const row = document.getElementById('details-row-' + orderId);
+            const btn = document.getElementById('btn-toggle-' + orderId);
+            if (!row) return;
+
+            if (row.style.display === 'none' || row.style.display === '') {
+                row.style.display = 'table-row';
+                if (btn) btn.innerHTML = '▲ Ocultar';
+            } else {
+                row.style.display = 'none';
+                if (btn) btn.innerHTML = '▼ Ver artículos';
+            }
+        }
+
+        function filterOrders() {
+            const input = document.getElementById('orderSearch');
+            const filter = input.value.toLowerCase();
+            const mainRows = document.querySelectorAll('.order-main-row');
+
+            mainRows.forEach(row => {
+                const orderId = row.getAttribute('data-order-id');
+                const subRow = document.getElementById('details-row-' + orderId);
+                const text = row.innerText.toLowerCase();
+
+                if (text.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                    if (subRow) subRow.style.display = 'none';
+                    const btn = document.getElementById('btn-toggle-' + orderId);
+                    if (btn) btn.innerHTML = '▼ Ver artículos';
+                }
+            });
+        }
+
         function filterUsers() {
             const input = document.getElementById('userSearch');
             const filter = input.value.toLowerCase();
