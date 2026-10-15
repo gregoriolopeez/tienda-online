@@ -14,7 +14,7 @@
     if(isset($_SESSION['user'])){
         echo "hola <strong>".htmlspecialchars($_SESSION['user']->getUsername())."</strong>";
         if($_SESSION['user']->isAdmin()){
-            echo " <em>(Admin)</em> | <a href='index.php?c=admin'>⚙️ Panel Admin</a> | <a href='index.php?c=product&new'>➕ Nuevo Producto</a>";
+            echo " <em>(Admin)</em> | <a href='index.php?c=admin'>⚙️ Panel Admin</a> | <a href='index.php?c=product'>📦 Gestión Productos</a> | <a href='index.php?c=product&new'>➕ Nuevo Producto</a>";
         }
         echo " | <a href='index.php?c=order&show'>🛒 Ver carrito</a> | <a href='index.php?c=user&logout'>Salir</a>";
     }

@@ -43,4 +43,38 @@ class ProductRepository{
         }
         return null;
     }
+
+    public static function addProduct($name, $description, $price, $stock){
+        $db = DB::connect();
+        $name = $db->real_escape_string(trim($name));
+        $description = $db->real_escape_string(trim($description));
+        $price = floatval($price);
+        $stock = intval($stock);
+        $q = "INSERT INTO products (name, description, price, stock) VALUES ('$name', '$description', $price, $stock)";
+        if ($db->query($q)) {
+            return $db->insert_id;
+        }
+        return false;
+    }
+
+    public static function updateProduct($id, $name, $description, $price, $stock){
+        $db = DB::connect();
+        $id = intval($id);
+        $name = $db->real_escape_string(trim($name));
+        $description = $db->real_escape_string(trim($description));
+        $price = floatval($price);
+        $stock = intval($stock);
+        $q = "UPDATE products SET name='$name', description='$description', price=$price, stock=$stock WHERE id=$id";
+        return $db->query($q);
+    }
+
+    public static function deleteProduct($id){
+        $db = DB::connect();
+        $id = intval($id);
+        try {
+            return $db->query("DELETE FROM products WHERE id=$id");
+        } catch (\mysqli_sql_exception $e) {
+            return false;
+        }
+    }
 }

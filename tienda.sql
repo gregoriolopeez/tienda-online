@@ -58,10 +58,9 @@ INSERT INTO products (name, description, price, stock) VALUES
 ('Ratón Gaming Ergonómico 16000 DPI', 'Sensor óptico de alta resolución, peso ultraligero de 68g y 6 botones programables.', 45.50, 30),
 ('Monitor Curvo Gaming 27" 165Hz QHD', 'Panel VA 2560x1440, curvatura 1500R y 1ms de tiempo de respuesta.', 229.00, 8),
 ('Mochila Impermeable para Portátil 15.6"', 'Diseño antirrobo con compartimento acolchado para portátil y puerto USB exterior.', 39.95, 25),
-('Soporte Ergonómico de Aluminio', 'Base plegable multialtura para portátiles de hasta 17 pulgadas.', 24.99, 18),
-('Alfombrilla Gaming XXL (900x400 mm)', 'Superficie de microfibra de baja fricción y base de goma antideslizante.', 19.90, 40),
+a('Alfombrilla Gaming XXL (900x400 mm)', 'Superficie de microfibra de baja fricción y base de goma antideslizante.', 19.90, 40),
 ('Altavoz Inteligente con Asistente', 'Altavoz estéreo 360 grados, conectividad Wi-Fi dual band y Bluetooth.', 49.99, 12),
 ('Memoria SSD NVMe M.2 1TB Gen4', 'Velocidades de lectura ultrarrápidas de hasta 5000 MB/s.', 89.00, 22),
 ('Webcam Full HD 1080p con Micrófono', 'Cámara web con enfoque automático y tapa de privacidad.', 34.90, 16),
 ('Lámpara LED de Escritorio con Carga Qi', 'Luz regulable con base de carga inalámbrica rápida para smartphones.', 32.50, 14),
-('Hub USB-C 7 en 1 Multifunción', 'Adaptador con HDMI 4K, 3 puertos USB 3.0, lector SD y PD 100W.', 27.99, 35);
+('Hub USB-C 7 en 1 Multifunción', 'Adaptador con HDMI 4K, 3 puertos USB 3.0, lector SD y PD 100W.', 27.99, 35);

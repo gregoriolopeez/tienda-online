@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Producto #<?= $product->getId() ?> - Panel de Administración</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .edit-container {
+            max-width: 680px;
+            margin: 40px auto;
+            padding: 0 20px 60px;
+        }
+        .edit-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(12px);
+        }
+        .edit-header {
+            padding: 24px 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .edit-header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .edit-form {
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .form-group label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-control {
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #fff;
+            padding: 11px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .form-control:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 10px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .btn-cancel {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.92rem;
+            transition: all 0.2s ease;
+        }
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+        .btn-save {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 24px;
+            border-radius: 8px;
+            background: #6366f1;
+            color: #fff;
+            border: none;
+            font-weight: 600;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-save:hover {
+            background: #4f46e5;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+        .product-badge-id {
+            background: rgba(99, 102, 241, 0.2);
+            color: #c7d2fe;
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="edit-container">
+        <div class="edit-card">
+            <div class="edit-header">
+                <h1>
+                    <span>✏️ Editar Producto</span>
+                    <span class="product-badge-id">#<?= $product->getId() ?></span>
+                </h1>
+                <a href="index.php?c=product&manage" class="btn-cancel" style="padding: 6px 12px; font-size: 0.85rem;">
+                    ✕ Cerrar
+                </a>
+            </div>
+
+            <form action="index.php?c=product&update" method="POST" class="edit-form">
+                <input type="hidden" name="id" value="<?= $product->getId() ?>">
+
+                <div class="form-group">
+                    <label for="name">Nombre del producto *</label>
+                    <input type="text" id="name" name="name" class="form-control" 
+                           value="<?= htmlspecialchars($product->getName()) ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Descripción detallada</label>
+                    <textarea id="description" name="description" class="form-control" rows="4" 
+                              placeholder="Características y detalles del artículo..."><?= htmlspecialchars($product->getDescription()) ?></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="price">Precio (€) *</label>
+                        <input type="number" id="price" name="price" class="form-control" 
+                               step="0.01" min="0" value="<?= number_format(floatval($product->getPrice()), 2, '.', '') ?>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="stock">Stock disponible *</label>
+                        <input type="number" id="stock" name="stock" class="form-control" 
+                               min="0" step="1" value="<?= intval($product->getStock()) ?>" required>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="index.php?c=product&manage" class="btn-cancel">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn-save">
+                        💾 Guardar Cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

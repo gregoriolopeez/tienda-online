@@ -357,6 +357,7 @@
                 <p>Gestión centralizada de pedidos y usuarios de la tienda</p>
             </div>
             <nav class="admin-nav">
+                <a href="index.php?c=product" class="admin-btn btn-secondary">📦 Gestión Productos</a>
                 <a href="index.php" class="admin-btn btn-secondary">🏠 Tienda</a>
                 <a href="index.php?c=product&new" class="admin-btn btn-primary">➕ Nuevo Producto</a>
                 <a href="index.php?c=user&logout" class="admin-btn btn-danger">🚪 Salir</a>
@@ -423,6 +424,9 @@
             <a href="#usersSection" class="quick-nav-btn">
                 <span>👥 Usuarios</span>
                 <span class="badge-count"><?= $totalUsers ?></span>
+            </a>
+            <a href="index.php?c=product" class="quick-nav-btn">
+                <span>🏷️ Gestionar Productos</span>
             </a>
         </div>
 
