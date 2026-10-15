@@ -28,4 +28,30 @@ class OrderLineRepository{
         if($db->insert_id) return true;
         else return false;
     }
+
+    public static function updateQuantity($id, $quantity, $order_id = null){
+        $db = DB::connect();
+        $id = intval($id);
+        $quantity = intval($quantity);
+        if ($quantity <= 0) {
+            return self::deleteOrderLine($id, $order_id);
+        }
+        $where = "id = $id";
+        if ($order_id !== null) {
+            $order_id = intval($order_id);
+            $where .= " AND order_id = $order_id";
+        }
+        return $db->query("UPDATE order_lines SET quantity = $quantity WHERE $where");
+    }
+
+    public static function deleteOrderLine($id, $order_id = null){
+        $db = DB::connect();
+        $id = intval($id);
+        $where = "id = $id";
+        if ($order_id !== null) {
+            $order_id = intval($order_id);
+            $where .= " AND order_id = $order_id";
+        }
+        return $db->query("DELETE FROM order_lines WHERE $where");
+    }
 }

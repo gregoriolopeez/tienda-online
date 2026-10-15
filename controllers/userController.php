@@ -6,6 +6,16 @@ if(isset($_GET['logout'])){
     exit;
 }
 
+if(isset($_GET['admin'])){
+    if(!isset($_SESSION['user']) || !$_SESSION['user']->isAdmin()){
+        header('location:index.php');
+        exit;
+    }
+    $users = UserRepository::getUsers();
+    require_once('views/adminView.phtml');
+    exit;
+}
+
 if(isset($_POST['login'])){
     if(isset($_POST['username']) && isset($_POST['password'])){
         $db = DB::connect();
@@ -27,7 +37,8 @@ if(isset($_POST['login'])){
             if($row['password'] == $passHash){
                 $username = $row['username'] ?? $row['name'] ?? $_POST['username'];
                 $email = $row['email'] ?? '';
-                $_SESSION['user'] = new User($row['id'], $username, $email, $row['password']);
+                $role = $row['role'] ?? 'user';
+                $_SESSION['user'] = new User($row['id'], $username, $email, $row['password'], $role);
             }
         }
     }
@@ -43,10 +54,10 @@ if(isset($_POST['register'])){
 
         $inserted = false;
         try {
-            $inserted = $db->query("INSERT INTO users VALUES (NULL, '$userParam', '$passHash')");
+            $inserted = $db->query("INSERT INTO users (username, password, role) VALUES ('$userParam', '$passHash', 'user')");
         } catch (\mysqli_sql_exception $e) {
             try {
-                $inserted = $db->query("INSERT INTO user (name, email, password) VALUES ('$userParam', '$userParam@tienda.com', '$passHash')");
+                $inserted = $db->query("INSERT INTO user (name, email, password, role) VALUES ('$userParam', '$userParam@tienda.com', '$passHash', 'user')");
             } catch (\mysqli_sql_exception $e2) {
                 $inserted = false;
             }

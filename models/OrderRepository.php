@@ -20,5 +20,16 @@ class OrderRepository{
         }
         return false;
     }
-    
+
+    public static function recalculateTotal($orderId){
+        $db = DB::connect();
+        $orderId = intval($orderId);
+        $res = $db->query("SELECT SUM(quantity * price) AS total FROM order_lines WHERE order_id = $orderId");
+        $total = 0.00;
+        if($res && $row = $res->fetch_assoc()){
+            $total = floatval($row['total'] ?? 0);
+        }
+        $db->query("UPDATE orders SET total_price = $total WHERE id = $orderId");
+        return $total;
+    }
 }

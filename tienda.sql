@@ -11,7 +11,8 @@ USE shop;
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(100) NOT NULL,
-  password VARCHAR(255) NOT NULL
+  password VARCHAR(255) NOT NULL,
+  role VARCHAR(50) NOT NULL DEFAULT 'user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Tabla products
@@ -44,6 +45,11 @@ CREATE TABLE IF NOT EXISTS order_lines (
 -- Compatibilidad: vistas / tablas en singular si aún se usan
 CREATE TABLE IF NOT EXISTS user LIKE users;
 CREATE TABLE IF NOT EXISTS product LIKE products;
+
+-- Usuarios de muestra (admin: admin/admin, user: jose/jose)
+INSERT INTO users (username, password, role) VALUES
+('admin', MD5('admin'), 'admin'),
+('jose', MD5('jose'), 'user');
 
 -- Productos de muestra iniciales
 INSERT INTO products (name, description, price, stock) VALUES

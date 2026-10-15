@@ -1,23 +1,261 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Carrito de Compras</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .cart-container {
+            max-width: 950px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .cart-header h1 {
+            font-size: 1.8rem;
+            color: #fff;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cart-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .cart-table th {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 14px 18px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .cart-table td {
+            padding: 16px 18px;
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            vertical-align: middle;
+        }
+        .cart-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .qty-form {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .qty-input {
+            width: 65px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            text-align: center;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .qty-input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+        }
+        .btn-update {
+            background: #6366f1;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-update:hover {
+            background: #4f46e5;
+        }
+        .btn-delete {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        .btn-delete:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+        .cart-summary {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            background: rgba(15, 23, 42, 0.4);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .total-amount {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #34d399;
+        }
+        .cart-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: all 0.2s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 50px 20px;
+            color: #94a3b8;
+        }
+        .empty-cart h2 {
+            color: #f8fafc;
+            margin-bottom: 8px;
+        }
+        .empty-cart p {
+            margin-bottom: 20px;
+        }
+        .qty-hint {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+    </style>
 </head>
 <body>
-    este es tu pedido<br>
+    <div class="cart-container">
+        <header class="cart-header">
+            <h1>🛒 Carrito de Compras</h1>
+            <a href="index.php" class="btn-secondary">🏠 Seguir Comprando</a>
+        </header>
 
-    <?php
-echo "fecha: ".$order->getDate()."<br>";
+        <?php
+        /** @var Order|false $order */
+        $orderLines = ($order && method_exists($order, 'getOrderLines')) ? $order->getOrderLines() : [];
+        ?>
 
-foreach($order->getOrderLines() as $ol){
-    echo $ol->getProduct()->getName(). " - ".$ol->getQuantity()." - ".$ol->getPrice()."<br>";
-}
+        <?php if (!empty($orderLines)): ?>
+            <div class="cart-card">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th style="width: 110px;">Precio</th>
+                            <th style="width: 200px;">Cantidad</th>
+                            <th style="width: 110px;">Subtotal</th>
+                            <th style="width: 60px; text-align: center;">Quitar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php 
+                    $totalCalculado = 0;
+                    foreach ($orderLines as $ol): 
+                        $product = $ol->getProduct();
+                        $productName = $product ? htmlspecialchars($product->getName()) : 'Producto #' . $ol->getId();
+                        $price = floatval($ol->getPrice());
+                        $qty = intval($ol->getQuantity());
+                        $subtotal = $price * $qty;
+                        $totalCalculado += $subtotal;
+                    ?>
+                        <tr>
+                            <td>
+                                <strong><?= $productName ?></strong>
+                            </td>
+                            <td><?= number_format($price, 2) ?> €</td>
+                            <td>
+                                <form action="index.php?c=order&update" method="POST" class="qty-form">
+                                    <input type="hidden" name="id" value="<?= $ol->getId() ?>">
+                                    <input type="number" name="quantity" value="<?= $qty ?>" min="0" class="qty-input">
+                                    <button type="submit" class="btn-update">Actualizar</button>
+                                </form>
+                                <div class="qty-hint">(0 para eliminar)</div>
+                            </td>
+                            <td style="font-weight: 700; color: #f8fafc;">
+                                <?= number_format($subtotal, 2) ?> €
+                            </td>
+                            <td style="text-align: center;">
+                                <a href="index.php?c=order&delete=<?= $ol->getId() ?>" 
+                                   class="btn-delete" 
+                                   title="Eliminar producto del carrito"
+                                   onclick="return confirm('¿Eliminar <?= addslashes($productName) ?> del carrito?')">
+                                    🗑️
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
 
-echo "total: ".$order->getTotal();
-
-
-?>
+                <div class="cart-summary">
+                    <div>
+                        <span style="color: #94a3b8; font-size: 0.95rem;">Fecha del pedido: </span>
+                        <strong><?= htmlspecialchars($order->getDate()) ?></strong>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div>
+                            <span style="color: #94a3b8; font-size: 0.95rem; margin-right: 8px;">Total:</span>
+                            <span class="total-amount"><?= number_format($totalCalculado, 2) ?> €</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php else: ?>
+            <div class="cart-card empty-cart">
+                <div style="font-size: 3rem; margin-bottom: 12px;">🛒</div>
+                <h2>Tu carrito está vacío</h2>
+                <p>No tienes ningún producto en tu pedido actual.</p>
+                <a href="index.php" class="btn-secondary" style="background: #6366f1; color: #fff;">Explorar Catálogo de Productos</a>
+            </div>
+        <?php endif; ?>
+    </div>
 </body>
 </html>

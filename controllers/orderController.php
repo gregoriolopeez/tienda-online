@@ -38,8 +38,55 @@ if(isset($_GET['add'])){
    exit; 
 }
 
+if(isset($_GET['update'])){
+    if(!isset($_SESSION['user'])){
+        header('location: index.php?login');
+        exit;
+    }
+
+    if(isset($_POST['id']) && isset($_POST['quantity'])){
+        $order = OrderRepository::getCarritoByUserId($_SESSION['user']->getId());
+        if($order){
+            $lineId = intval($_POST['id']);
+            $quantity = intval($_POST['quantity']);
+
+            if($quantity <= 0){
+                OrderLineRepository::deleteOrderLine($lineId, $order->getId());
+            } else {
+                OrderLineRepository::updateQuantity($lineId, $quantity, $order->getId());
+            }
+
+            OrderRepository::recalculateTotal($order->getId());
+        }
+    }
+
+    header('location: index.php?c=order&show');
+    exit;
+}
+
+if(isset($_GET['delete'])){
+    if(!isset($_SESSION['user'])){
+        header('location: index.php?login');
+        exit;
+    }
+
+    $lineId = intval($_GET['delete'] ?: ($_POST['id'] ?? 0));
+    $order = OrderRepository::getCarritoByUserId($_SESSION['user']->getId());
+    if($order && $lineId > 0){
+        OrderLineRepository::deleteOrderLine($lineId, $order->getId());
+        OrderRepository::recalculateTotal($order->getId());
+    }
+
+    header('location: index.php?c=order&show');
+    exit;
+}
+
 if(isset($_GET['show'])){
-       $order=OrderRepository::getCarritoByUserId($_SESSION['user']->getId());
+    if(!isset($_SESSION['user'])){
+        header('location: index.php?login');
+        exit;
+    }
+    $order=OrderRepository::getCarritoByUserId($_SESSION['user']->getId());
     require_once('views/showOrderView.phtml');
     exit;
 }
